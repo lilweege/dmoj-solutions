@@ -9,7 +9,7 @@ class Edge:
 		return self.c < other.c
 
 	def __iter__(self):
-		yield from [self.a, self.b, self.c, self.o]
+		yield from (self.a, self.b, self.c, self.o,)
 
 	def __repr__(self):
 		return f"Edge({self.a}, {self.b}, {self.c}, {self.o})"

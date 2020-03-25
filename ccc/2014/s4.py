@@ -1,44 +1,45 @@
-class Window:
-	def __init__(self, x, y, w, h, t):
-		self.x = x
-		self.y = y
-		self.w = w
-		self.h = h
-		self.t = t
-
-	def pointCollide(self, px, py):
-		return px >= self.x and px < self.x + self.w and py >= self.y and py < self.y + self.h
-
-
+import sys
+input = sys.stdin.readline
 n = int(input())
-tintFactor = int(input())
-MAX = 1000000
-l = t = MAX
-r = b = 0
+t = int(input())
 
-rects = []
-for _ in range(n):
-	x1, y1, x2, y2, tf = map(int, input().split(" "))
-	l = min(l, x1)
-	t = min(t, y1)
-	r = max(r, x2)
-	b = max(b, y2)
-	rects.append(Window(x1, y1, x2-x1, y2-y1, tf))
+lines = []
+ys = []
 
-tint = [[0 for _ in range(l, r+1)] for _ in range(t, b+1)]
-tinted = 0
+class Line:
+	def __init__(self, xr, y1, y2, tf):
+		self.xr = xr
+		self.y1 = y1
+		self.y2 = y2
+		self.tf = tf
 
-# brute force times out on most problems
-# this is a very bad solution lol
-for rect in rects:
-	for x in range(l, r+1):
-		for y in range(t, b+1):
-			if rect.pointCollide(x, y):
-				tint[y-b-1][x-l-1] += rect.t
+	def __lt__(self, other):
+		return self.xr < other.xr
 
-for x in range(l, r+1):
-	for y in range(t, b+1):
-		if tint[y-b-1][x-l-1] >= tintFactor:
-			tinted += 1
+	def __iter__(self):
+		yield from (self.xr, self.y1, self.y2, self.tf,)
 
-print(tinted)
+for i in range(n):
+	xl, yt, xr, yb, tf = map(int,input().split())
+	lines += [Line(xl, yt, yb, tf), Line(xr, yt, yb,-tf)]
+	ys += [yt, yb]
+
+lines.sort()
+ys = list(set(ys))
+ys.sort()
+
+tint = [0]*(len(ys))
+ans = 0
+xl = 0
+for xr, y1, y2, tf in lines:
+
+	for j in range(len(ys)-1):
+		if tint[j] >= t:
+			ans += (ys[j+1] - ys[j]) * (xr - xl)
+
+	for j in range(len(ys)-1):
+		if y1 <= ys[j] and y2 >= ys[j+1]:
+			tint[j] += tf
+	xl = xr
+
+print(ans)

@@ -19,7 +19,7 @@ void pow(ull f[2][2], ull n) {
   if (n > 1) {
 	pow(f, n/2);
 	mult(f, f);
-	if (n & 1) {
+	if (n % 2 == 1) {
 	  mult(f, g);
 	}
   }
@@ -32,18 +32,22 @@ ull fib(ull n) {
   return f[0][0] % m;
 }
 
-
-int main() {
+int readintmod() {
+  int pisano = 2*(m+1);
   ull n = 0;
   int c = 0;
   while (c < '0') {
 	c = getchar();
   }
   while (c >= '0') {
-	n = (n * 10 + c - '0') % (2*(m+1));
+	n = (n * 10 + c - '0') % pisano;
 	c = getchar();
   }
+  return n;
+}
 
+int main() {
+  ull n = readintmod();
   cout << fib(n);
   return 0;
 }
