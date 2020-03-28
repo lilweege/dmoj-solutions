@@ -1,5 +1,8 @@
 #include <bits/stdc++.h>
 
+#define scan(x) do{while((x=getchar())<'0'); for(x-='0'; '0'<=(_=getchar()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
+
 #include <regex>
 std::string trim(std::string s) { return regex_replace(s, std::regex("(^[ ]+)|([ ]+$)"), ""); }
 
@@ -19,7 +22,6 @@ Leaf* createLeafC(Leaf* l, Leaf* r) {
 
     newLeaf->l = l;
     newLeaf->r = r;
-    //    memset (&newLeaf->dp, 0, XMAX * sizeof(int));
     newLeaf->v = 0;
 
     return newLeaf;
@@ -31,7 +33,6 @@ Leaf* createLeafV(int v) {
 
     newLeaf->l = NULL;
     newLeaf->r = NULL;
-    //    memset(&newLeaf->dp, 0, XMAX * sizeof(int));
     newLeaf->v = v;
 
     return newLeaf;
@@ -40,13 +41,12 @@ Leaf* createLeafV(int v) {
 
 Leaf* createTree(std::string s) {
 
-    int i = 1;
-    int len = s.length();
-
     if (s[0] != '(') return createLeafV(stoi(s));
 
+    int len = s.length();
     s = trim(s.substr(1, len - 2));
 
+    int i = 1;
     if (s[0] == '(') {
         //for (int cnt = 1; cnt != 0 && i < len; cnt += (s[i] == '(') - (s[i] == ')'), i++);
         for (int cnt = 1; cnt != 0; i++) {
@@ -64,15 +64,12 @@ Leaf* createTree(std::string s) {
 
 void calc(Leaf* leaf) {
 
-    int* dpl;
-    int* dpr;
-
     if (leaf->l) {
         calc(leaf->l);
         calc(leaf->r);
 
-        dpl = (int*)malloc(sizeof(int) * XMAX);
-        dpr = (int*)malloc(sizeof(int) * XMAX);
+        int* dpl = (int*)malloc(XMAX * sizeof(int));
+        int* dpr = (int*)malloc(XMAX * sizeof(int));
 
         for (int i = 0; i <= x; i++) {
             for (int w = 0; w <= i; w++) {
@@ -101,8 +98,8 @@ int main() {
     getline(std::cin, s);
     Leaf* root = createTree(s);
 
-    std::cin >> x;
+    scan(x);
     calc(root);
 
-    std::cout << root->dp[x];
+    printf("%d", root->dp[x]);
 }
