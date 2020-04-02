@@ -35,7 +35,7 @@ int main() {
 		u = find(u); v = find(v);
 		if (u != v) {
 			merge(u, v);
-	  mst.push_back(i);
+			mst.push_back(i);
 		}
 	}
 
