@@ -1,0 +1,34 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	target="./a.out"
+else
+	target="$1"
+fi
+
+total=0
+pass=0
+
+infiles=$(find data/tests/*.in* | sort -V)
+outfile="data/t.out"
+
+for infile in $infiles; do
+	
+	total=$(($total + 1))
+	TIMEFORMAT='%U'
+	elapsed=$(time ( $target < $infile > $outfile ) 2>&1 1>/dev/null)s
+
+	fname=${infile/"in"/"out"}
+	res=$(diff -q -Z $fname $outfile)
+	
+	fname=$(basename -- "$fname")
+	if [ "$res" == "" ]; then
+		echo $fname: [AC $elapsed]
+		pass=$(($pass + 1))
+	else
+		echo $fname: [WA $elapsed]
+		exit
+	fi
+done
+
+echo "[AC $pass/$total]"
