@@ -6,29 +6,32 @@ else
 	target="$1"
 fi
 
-total=0
-pass=0
 
 infiles=$(find data/tests/*.in* | sort -V)
 outfile="data/t.out"
 
+total=$(echo "$infiles" | wc -l)
+pass=0
+duration=0
+
 for infile in $infiles; do
 	
-	total=$(($total + 1))
 	TIMEFORMAT='%U'
-	elapsed=$(time ( $target < $infile > $outfile ) 2>&1 1>/dev/null)s
+	elapsed=$(time ( $target < $infile > $outfile ) 2>&1 1>/dev/null)
+	duration=$(echo "$duration + $elapsed" | bc)
 
 	fname=${infile/"in"/"out"}
 	res=$(diff -q -Z $fname $outfile)
 	
 	fname=$(basename -- "$fname")
 	if [ "$res" == "" ]; then
-		echo $fname: [AC $elapsed]
+		echo $fname: [AC $elapsed\s]
 		pass=$(($pass + 1))
 	else
-		echo $fname: [WA $elapsed]
-		exit
+		echo $fname: [WA $elapsed\s]
+		# break
 	fi
 done
 
-echo "[AC $pass/$total]"
+duration=$(printf %.3f $duration)s
+echo "all: [$pass/$total $duration]"
