@@ -1,34 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// struct point {
-// 	int x, y;
-// };
 using point = pair<int, int>;
-vector<point> points;
-
-struct pair_hash {
-	size_t operator() (const pair<int, int> &p) const {
-		return hash<int>()(p.first) ^ hash<int>()(p.second);
-	}
-};
-
-enum dir {
-	// clockwise
-	UP, RIGHT, DOWN, LEFT
-};
-
-
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	
-
 	int n;
 	cin >> n;
 
 	vector<point> unsorted(n);
+	vector<array<int, 4>> adj(n, {-1, -1, -1, -1});
+	vector<array<int, 4>> wall(n, {-1, -1, -1, -1});
 	for (auto& [x, y] : unsorted)
 		cin >> x >> y;
 
@@ -39,164 +23,65 @@ int main() {
 			return unsorted[l] < unsorted[r];
 		});
 
-	
-	points.resize(n);
-	set<int> allStarts;
-	unordered_map<int, int> revindices(n);
-	for (int i = 0; i < n; ++i) {
-		points[i] = unsorted[indices[i]];
-		revindices.emplace(indices[i], i);
-		allStarts.insert(i);
-	}
-
 	int w;
 	cin >> w;
-	unordered_map<int, unordered_map<int, int>> adj(n);
-	unordered_set<int> wallsStanding(w);
-	for (int i = 1; i <= w; ++i) {
-		wallsStanding.insert(i);
+	vector<int> time(w, -1);
+
+	for (int i = 0; i < w; ++i) {
 		int A, B;
 		cin >> A >> B;
 		--A, --B;
-		adj[revindices[A]].emplace(revindices[B], i);
-		adj[revindices[B]].emplace(revindices[A], i);
+		auto [ax, ay] = unsorted[A];
+		auto [bx, by] = unsorted[B];
+		int dx = bx - ax;
+		int dy = by - ay;
+		// clockwise
+		// 0, 1, 2, 3 -> u, r, d, l
+		int a2b = dx ?
+			((dx > 0) ? 1 : 3) :
+			((dy > 0) ? 0 : 2);
+		int b2a = (a2b + 2) % 4;
+		adj[A][a2b] = B;
+		adj[B][b2a] = A;
+		wall[A][a2b] = i;
+		wall[B][b2a] = i;
 	}
 
-
-	// 0, 1, 2, 3 -> u, r, d, l
-	auto getDir = [](int dx, int dy) {
-		// same point or diagonal
-		assert((dx == 0) != (dy == 0));
-		return dx ?
-			((dx > 0) ? RIGHT : LEFT) :
-			((dy > 0) ? UP : DOWN);
+	int rel_time = -1;
+	auto keep_going = [&](int cur, int dir) {
+		return wall[cur][dir] != -1 && (
+			time[wall[cur][dir]] == -1 ||
+			time[wall[cur][dir]] == rel_time);
 	};
 
-
-	vector<int> starts;
-	starts.push_back(0);
-	while (!starts.empty()) {
-		// (cur, nxt), count
-		unordered_map<pair<int, int>, int, pair_hash> edgeCount(n);
-
-		for (int start : starts) {
-			allStarts.erase(start);
-
-			dir startDir = DOWN;
-			for (auto [nxt, _] : adj[start]) {
-				auto [cx, cy] = points[start];
-				auto [nx, ny] = points[nxt];
-				dir d = getDir(nx - cx, ny - cy);
-
-				if (d == UP) {
-					startDir = UP;
-					break;
-				}
-				if (d == RIGHT) {
-					startDir = RIGHT;
-				}
-			}
-			if (startDir == DOWN)
+	vector<int> standing;
+	for (int start : indices)
+		for (int start_dir = 0; start_dir < 4; ++start_dir) {
+			++rel_time;
+			if (!keep_going(start, start_dir))
 				continue;
-
-
-			dir cd = startDir;
-
 			int cur = start;
-			bool first = true;
-			bool done = false;
+			int dir = start_dir;
 			do {
-				int nextPoints[4] = {-1, -1, -1, -1};
-				pair<int, int> nextEdge[4];
-
-				for (auto [nxt, wall] : adj[cur]) {
-					if (!wallsStanding.contains(wall))
-						continue;
-					auto [cx, cy] = points[cur];
-					auto [nx, ny] = points[nxt];
-					dir d = getDir(nx - cx, ny - cy);
-					
-					nextPoints[d] = nxt;
-					if (cur < nxt)
-						nextEdge[d] = {cur, nxt};
-					else
-						nextEdge[d] = {nxt, cur};
+				int cur_wall = wall[cur][dir];
+				if (time[cur_wall] == rel_time) {
+					// water on both sides
+					standing.push_back(cur_wall+1);
 				}
-				
+				time[cur_wall] = rel_time;
+				cur = adj[cur][dir];
 
-				for (int i = -1; i <= 2; ++i) {
-					int x = cd + i;
-					if (x < 0) x += 4;
-					else if (x >= 4) x -= 4;
-					dir d = static_cast<dir>(x);
-					if (nextPoints[d] != -1) {
-						if (!first && cur == start && d == startDir) {
-							done = true;
-						}
-						else {
-							cd = d;
-							cur = nextPoints[d];
-							++edgeCount[nextEdge[d]];
-						}
+				for (int rot = -1, old = dir; rot <= 2; ++rot) {
+					dir = (old + rot) % 4;
+					if (dir < 0) dir += 4;
+					if (keep_going(cur, dir))
 						break;
-					}
 				}
-
-				if (first) first = false;
-			} while (!done);
+			} while (cur != start);
 		}
 
-		int edgesRemoved = 0;
 
-		for (auto [ed, cnt] : edgeCount) {
-			if (cnt == 1) {
-				++edgesRemoved;
-				auto [cur, nxt] = ed;
-				int wall = adj[cur][nxt];
-				assert(cur != nxt);
-				assert(wall != 0);
-
-				wallsStanding.erase(wall);
-				adj[cur].erase(nxt);
-				if (adj[cur].empty()) {
-					adj.erase(cur);
-					allStarts.erase(cur);
-				}
-				adj[nxt].erase(cur);
-				if (adj[nxt].empty()) {
-					adj.erase(nxt);
-					allStarts.erase(nxt);
-				}
-			}
-		}
-		if (edgesRemoved == 0)
-			break;
-		edgeCount.clear();
-
-
-		starts.clear();
-		unordered_set<int> vis(n);
-
-		function<void(int)> dfs = [&](int cur) {
-			for (auto [nxt, wall] : adj[cur]) {
-				if (!wallsStanding.contains(wall) || vis.contains(nxt))
-					continue;
-				vis.insert(nxt);
-				dfs(nxt);
-			}
-		};
-
-		for (int cur : allStarts) {
-			if (vis.contains(cur))
-				continue;
-			vis.insert(cur);
-			starts.push_back(cur);
-			dfs(cur);
-		}
-	}
-
-
-	cout << wallsStanding.size() << "\n";
-	for (int wall : wallsStanding)
-		cout << wall << "\n";
+	cout << standing.size() << "\n";
+	for (int x : standing)
+		cout << x << "\n";
 }
