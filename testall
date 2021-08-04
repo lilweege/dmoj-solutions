@@ -9,6 +9,7 @@ fi
 
 infiles=$(find data/tests/*.in* | sort -V)
 outfile="data/t.out"
+logfile="data/t.err"
 
 total=$(echo "$infiles" | wc -l)
 pass=0
@@ -17,7 +18,8 @@ duration=0
 for infile in $infiles; do
 	
 	TIMEFORMAT='%U'
-	elapsed=$(time ( $target < $infile > $outfile ) 2>&1 1>/dev/null)
+	# swap stdout and sterr because bash time is dumb
+	elapsed=$(time (($target < $infile > $outfile 2> $logfile); exec 3>&2 2>&1 1>&3-;) 2>> $logfile)
 	duration=$(echo "$duration + $elapsed" | bc)
 
 	fname=${infile/"in"/"out"}
@@ -29,7 +31,8 @@ for infile in $infiles; do
 		pass=$(($pass + 1))
 	else
 		echo $fname: [WA $elapsed\s]
-		# break
+		cat $logfile
+		break
 	fi
 done
 
