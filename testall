@@ -19,7 +19,8 @@ for infile in $infiles; do
 	
 	TIMEFORMAT='%U'
 	# swap stdout and sterr because bash time is dumb
-	elapsed=$(time (($target < $infile > $outfile 2> $logfile); exec 3>&2 2>&1 1>&3-;) 2>> $logfile)
+	# TODO: somehow combine stdout and sterr to logfile without messing with time result
+	elapsed=$(time ($target < $infile > $outfile 2> $logfile; exec 3>&2 2>&1 1>&3-;) 2>> $logfile)
 	duration=$(echo "$duration + $elapsed" | bc)
 
 	fname=${infile/"in"/"out"}
@@ -32,6 +33,7 @@ for infile in $infiles; do
 	else
 		echo $fname: [WA $elapsed\s]
 		cat $logfile
+		cat $outfile
 		break
 	fi
 done
