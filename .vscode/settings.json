@@ -1,0 +1,37 @@
+{
+    "C_Cpp.intelliSenseEngine": "Disabled",
+    "C_Cpp.autocomplete": "Disabled",
+    "C_Cpp.errorSquiggles": "Disabled",
+    "clangd.arguments": [
+        "-log=verbose",
+        "-pretty",
+        "--background-index",
+        "--compile-commands-dir=.vscode",
+        "--clang-tidy",
+        "--clang-tidy-checks=modernize-*,bugprone-*,llvm-*,performance-*,portability-*",
+        // https://clang.llvm.org/extra/clang-tidy/checks/list.html
+
+    ],
+    "saveAndRun": {
+        "commands": [
+            {
+                "match": ".c$",
+                "cmd": "gcc ${fileBasename}",
+                "useShortcut": false,
+                "silent": true
+            },
+            {
+                "match": ".cpp$",
+                "cmd": "g++ ${fileBasename} -std=c++20 -Wall -Wextra -Wshadow -fsanitize=undefined",
+                "useShortcut": false,
+                "silent": true
+            },
+            {
+                "match": ".java$",
+                "cmd": "javac ${fileBasename}",
+                "useShortcut": false,
+                "silent": true
+            },
+        ]
+    }
+}
