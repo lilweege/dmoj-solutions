@@ -1,13 +1,8 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-	target="./a.out"
-else
-	target="$1"
-fi
+[ -z "$1" ] && target="./a.out" || target="$1"
+[ -z "$2" ] && testDir="data/tests" || testDir="$2"
 
-
-testDir="data/tests"
 infiles=$(find $testDir/*.in* | sort -V)
 outfile="$testDir/t.out"
 logfile="$testDir/t.err"
@@ -22,7 +17,7 @@ for infile in $infiles; do
 	# swap stdout and sterr because bash time is dumb
 	# TODO: somehow combine stdout and sterr to logfile without messing with time result
 	elapsed=$(time ($target < $infile > $outfile 2> $logfile; exec 3>&2 2>&1 1>&3-;) 2>> $logfile)
-	duration=$(awk 'BEGIN {print ($duration+$elapsed)}')
+	duration=$(echo "$duration + $elapsed" | bc)
 
 	fname=${infile/"in"/"out"}
 	res=$(diff -q -Z $fname $outfile)
