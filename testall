@@ -7,9 +7,10 @@ else
 fi
 
 
-infiles=$(find data/tests/*.in* | sort -V)
-outfile="data/t.out"
-logfile="data/t.err"
+testDir="data/tests"
+infiles=$(find $testDir/*.in* | sort -V)
+outfile="$testDir/t.out"
+logfile="$testDir/t.err"
 
 total=$(echo "$infiles" | wc -l)
 pass=0
@@ -40,3 +41,5 @@ done
 
 duration=$(printf %.3f $duration)s
 echo "all: [$pass/$total $duration]"
+
+rm -f $outfile $logfile
