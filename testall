@@ -21,7 +21,7 @@ for infile in $infiles; do
 	# swap stdout and sterr because bash time is dumb
 	# TODO: somehow combine stdout and sterr to logfile without messing with time result
 	elapsed=$(time ($target < $infile > $outfile 2> $logfile; exec 3>&2 2>&1 1>&3-;) 2>> $logfile)
-	duration=$(echo "$duration + $elapsed" | bc)
+	duration=$(awk 'BEGIN {print ($duration+$elapsed)}')
 
 	fname=${infile/"in"/"out"}
 	res=$(diff -q -Z $fname $outfile)
