@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/split-a-string-in-balanced-strings
-
 class Solution {
     public int balancedStringSplit(String s) {
         int diff = 0;

@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/simple-bank-system
-
 class Bank {
     vector<long long> accounts;
     int n;

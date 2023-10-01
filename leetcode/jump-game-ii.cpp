@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/jump-game-ii
-
 class Solution {
 public:
     int jump(vector<int>& nums) {
@@ -20,7 +18,7 @@ public:
         // queue<pair<int, int>> q;
         // // number of steps, index
         // q.emplace(0, 0);
-        // while (!empty(q)) {
+        // while (!q.empty()) {
         //     auto [steps, cur] = q.front(); q.pop();
         //     if (vis[cur])
         //         continue;

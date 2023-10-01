@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/counting-elements
-
 class Solution {
 public:
     int countElements(vector<int>& arr) {

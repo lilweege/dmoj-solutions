@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/roman-to-integer
-
 class Solution {
     public static int symbolValue(char c) {
 		return switch (c) {

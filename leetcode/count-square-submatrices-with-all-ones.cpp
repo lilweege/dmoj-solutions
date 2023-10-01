@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/count-square-submatrices-with-all-ones
-
 class Solution {
     /*
     int brute(const vector<vector<int>>& matrix) {

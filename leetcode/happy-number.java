@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/happy-number
-
 class Solution {
     public int sq(int x) { return x * x; }
     

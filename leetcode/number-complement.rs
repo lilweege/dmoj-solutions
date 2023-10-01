@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/number-complement
-
 impl Solution {
     pub fn find_complement(num: i32) -> i32 {
         let mut num = num;

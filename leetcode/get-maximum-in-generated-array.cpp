@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/get-maximum-in-generated-array
-
 class Solution {
     vector<int> generate(int n)
     {

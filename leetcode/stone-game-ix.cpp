@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/stone-game-ix
-
 class Solution {
 public:
     bool stoneGameIX(vector<int>& stones) {

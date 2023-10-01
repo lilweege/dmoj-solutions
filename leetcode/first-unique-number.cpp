@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/first-unique-number
-
 class FirstUnique {
     unordered_map<int, int> f;
     queue<int> q;

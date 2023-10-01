@@ -1,27 +1,30 @@
-// https://leetcode.com/problems/find-all-anagrams-in-a-string
-
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        int m = s.size(), n = p.size();
-        if (n > m) return {};
+        vector<int> ans;
+        int n = s.size(), m = p.size();
+        if (m > n) return {};
+        int cnt[26]{};
+        for (char c : p) --cnt[c-'a'];
         
-        vector<int> indecies;
-        vector<int> diff(26);
-        for (int i = 0; i < n; ++i) {
-            --diff[p[i] - 'a'];
-            ++diff[s[i] - 'a'];
-        }
-        
-        for (int i = 0; i < m - n; ++i) {
-            if (!any_of(diff.begin(), diff.end(), [](int x) { return x; }))
-                indecies.push_back(i);
-            --diff[s[i] - 'a'];
-            ++diff[s[i + n] - 'a'];
-        }
-        if (!any_of(diff.begin(), diff.end(), [](int x) { return x; }))
-            indecies.push_back(m - n);
+        for (int i = 0; i < m; ++i)
+            ++cnt[s[i]-'a'];
 
-        return indecies;
+        auto check_ok = [&](int i) {
+            bool yes = true;
+            for (int j = 0; j < 26; ++j)
+                if (cnt[j] != 0) {
+                    yes = false;
+                    break;
+                }
+            if (yes) ans.push_back(i);
+        };
+        check_ok(0);
+        for (int i = m; i < n; ++i) {
+            --cnt[s[i-m]-'a'];
+            ++cnt[s[i]-'a'];
+            check_ok(i-m+1);
+        }
+        return ans;
     }
 };

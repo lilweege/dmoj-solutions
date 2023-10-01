@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/backspace-string-compare
-
 class Solution {
     string simulate(string s) {
         vector<char> sb;

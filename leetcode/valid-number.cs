@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/valid-number
-
 public class Solution {
     public bool IsNumber(string s) {
         bool failed = true;

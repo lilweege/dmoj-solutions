@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/max-area-of-island
-
 class Solution {
     
     int m, n;

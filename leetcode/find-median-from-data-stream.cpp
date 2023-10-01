@@ -1,23 +1,24 @@
-// https://leetcode.com/problems/find-median-from-data-stream
-
 class MedianFinder {
 public:
-    /** initialize your data structure here. */
-    vector<int> nums;
+    priority_queue<int, vector<int>, less<int>> big;
+    priority_queue<int, vector<int>, greater<int>> sml;
     
     MedianFinder() {
         
     }
     
     void addNum(int num) {
-        nums.insert(upper_bound(nums.begin(), nums.end(), num), num);
+        big.push(num);
+        sml.push(big.top()); big.pop();
+        if (sml.size() > big.size()) {
+            big.push(sml.top()); sml.pop();
+        }
     }
     
     double findMedian() {
-        double mid = (nums.size()-1) * 0.5;
-        if (nums.size() % 2 == 1)
-            return nums[mid];
-        return (nums[mid] + nums[mid + 1]) * 0.5;
+        if (big.size() == sml.size())
+            return (big.top() + sml.top()) / 2.0;
+        return big.top();
     }
 };
 

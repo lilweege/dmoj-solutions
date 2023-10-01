@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/maximum-sum-circular-subarray
-
 class Solution {
     int kadane(const vector<int>& A) {
         int ans = INT_MIN, lmx = 0;

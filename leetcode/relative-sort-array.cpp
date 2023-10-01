@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/relative-sort-array
-
 class Solution {
 public:
     vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {

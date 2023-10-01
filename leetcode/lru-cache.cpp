@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/lru-cache
-
 class LRUCache {
 public:
     unordered_map<int, list<pair<int, int>>::iterator> m;

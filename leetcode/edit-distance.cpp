@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/edit-distance
-
 class Solution {
     int editDist(const string& s1, const string& s2, int m, int n) {
         vector<vector<int>> dp(m + 1, vector<int>(n + 1));

@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/perform-string-shifts
-
 class Solution {
 public:
     string stringShift(string s, vector<vector<int>>& shift) {

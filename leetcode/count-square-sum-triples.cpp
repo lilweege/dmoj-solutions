@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/count-square-sum-triples
-
 class Solution {
 public:
     int countTriples(int n) {

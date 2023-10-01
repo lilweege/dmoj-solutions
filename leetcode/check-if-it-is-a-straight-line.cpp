@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/check-if-it-is-a-straight-line
-
 class Solution {
     double getSlope(vector<int> p, vector<int> q) {
         if (p[0] == q[0]) return DBL_MIN;

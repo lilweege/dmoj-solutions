@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/online-stock-span
-
 class StockSpanner {
     stack<pair<int, int>> s;
 public:

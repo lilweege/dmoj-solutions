@@ -1,13 +1,12 @@
-// https://leetcode.com/problems/ransom-note
-
 class Solution {
 public:
-    bool canConstruct(string r, string mag) {
-        ios_base::sync_with_stdio(false);cin.tie(0),cout.tie(0);
-        vector<int> vr(26,0),vm(26,0);
-        for(char c:r) vr[c-'a']++;
-        for(char c:mag) vm[c-'a']++;
-        for(int i=0;i<26;i++) if(vm[i]<vr[i]) return false;
+    bool canConstruct(string ransomNote, string magazine) {
+        int cnt1[127]{};
+        int cnt2[127]{};
+        for (char c : magazine) ++cnt1[c];
+        for (char c : ransomNote) ++cnt2[c];
+        for (int i = 0; i < 127; ++i)
+            if (cnt2[i] > cnt1[i]) return false;
         return true;
     }
 };

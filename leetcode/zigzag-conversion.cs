@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/zigzag-conversion
-
 public class Solution {
     public string Convert(string s, int numRows) {
         if (numRows == 1) return s;

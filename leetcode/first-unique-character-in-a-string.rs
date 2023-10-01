@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/first-unique-character-in-a-string
-
 impl Solution {
     pub fn first_uniq_char(s: String) -> i32 {
         let mut cnt = [0;26];

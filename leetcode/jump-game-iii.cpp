@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/jump-game-iii
-
 class Solution {
     vector<int> vis;
     bool dfs(const vector<int>& arr, int n, int cur) {

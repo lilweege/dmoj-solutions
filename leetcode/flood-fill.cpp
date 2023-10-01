@@ -1,24 +1,26 @@
-// https://leetcode.com/problems/flood-fill
-
 class Solution {
-public:
-    vector<vector<int>> img;
-    int srcColor, newColor;
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int _newColor) {
-        img = image;
-        srcColor = image[sr][sc];
-        newColor = _newColor;
-        fillColor(sr, sc);
-        return img;
+    int m, n;
+    int orig, color;
+    vector<vector<int>> image;
+    void dfs(int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n) return;
+        if (image[i][j] == orig) {
+            image[i][j] = color;
+            dfs(i+1, j);
+            dfs(i-1, j);
+            dfs(i, j+1);
+            dfs(i, j-1);
+        }
     }
-    
-    void fillColor(int r, int c) {
-        if (r < 0 || r >= img.size() || c < 0 || c >= img[0].size() || img[r][c] == newColor || img[r][c] != srcColor)
-            return;
-        img[r][c] = newColor;
-        fillColor(r + 1, c);
-        fillColor(r - 1, c);
-        fillColor(r, c + 1);
-        fillColor(r, c - 1);
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& img, int sr, int sc, int col) {
+        image = img;
+        m = image.size();
+        n = image[0].size();
+        orig = image[sr][sc];
+        color = col;
+        if (color == orig) return image;
+        dfs(sr, sc);
+        return image;
     }
 };

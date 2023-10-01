@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/count-number-of-maximum-bitwise-or-subsets
-
 class Solution {
 public:
     int countMaxOrSubsets(vector<int>& nums) {

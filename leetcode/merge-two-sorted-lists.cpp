@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/merge-two-sorted-lists
-
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -12,52 +10,40 @@
  */
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if (!l1) return l2;
-        if (!l2) return l1;
-        
-        ListNode* root;
-        
-        if (l1->val < l2->val) {
-            root = l1;
-            l1 = l1->next;
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (!list1) return list2;
+        if (!list2) return list1;
+
+        ListNode* head;
+        if (list1->val < list2->val) {
+            head = new ListNode(list1->val);
+            list1 = list1->next;
         }
         else {
-            root = l2;
-            l2 = l2->next;
+            head = new ListNode(list2->val);
+            list2 = list2->next;
         }
-        
-        ListNode* cur = root;
-        while (l1 && l2) {
-            if (l1->val < l2->val) {
-                cur->next = l1;
-                l1 = l1->next;
+        ListNode* curr = head;
+        while (list1 || list2) {
+            if (!list1) {
+                curr->next = list2;
+                break;
+            }
+            if (!list2) {
+                curr->next = list1;
+                break;
+            }
+            if (list1->val < list2->val) {
+                curr->next = new ListNode(list1->val);
+                list1 = list1->next;
+                curr = curr->next;
             }
             else {
-                cur->next = l2;
-                l2 = l2->next;
-            }
-            cur = cur->next;
-        }
-        
-        if (l1) {
-            while (l2) {
-                cur->next = l2;
-                l2 = l2->next;
-                cur = cur->next;
+                curr->next = new ListNode(list2->val);
+                list2 = list2->next;
+                curr = curr->next;
             }
         }
-        else {
-            while (l1) {
-                cur->next = l1;
-                l1 = l1->next;
-                cur = cur->next;
-            }
-        }
-        if (l1)
-            cur->next = l1;
-        else if (l2)
-            cur->next = l2;
-        return root;
+        return head;
     }
 };

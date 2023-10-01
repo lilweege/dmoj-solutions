@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/minimum-moves-to-convert-string
-
 class Solution {
 public:
     int minimumMoves(string s) {

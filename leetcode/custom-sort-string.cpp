@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/custom-sort-string
-
 class Solution {
 public:
     string customSortString(string order, string str) {

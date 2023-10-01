@@ -1,35 +1,31 @@
-// https://leetcode.com/problems/min-stack
-
 class MinStack {
+    stack<pair<int, int>> st;
 public:
-    stack<pair<int, int>> s;
-    
     MinStack() {
         
     }
     
-    void push(int x) {
-        if (s.empty()) s.push(make_pair(x, x));
-        else s.push(make_pair(x, min(x, s.top().second)));
+    void push(int val) {
+        st.push({val, st.empty() ? val : min(st.top().second, val) });
     }
     
     void pop() {
-        s.pop();
+        st.pop();
     }
     
     int top() {
-        return s.top().first;
+        return st.top().first;
     }
     
     int getMin() {
-        return s.top().second;
+        return st.top().second;
     }
 };
 
 /**
  * Your MinStack object will be instantiated and called as such:
  * MinStack* obj = new MinStack();
- * obj->push(x);
+ * obj->push(val);
  * obj->pop();
  * int param_3 = obj->top();
  * int param_4 = obj->getMin();

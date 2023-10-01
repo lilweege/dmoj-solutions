@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/partition-array-into-disjoint-intervals
-
 class Solution {
 public:
     int partitionDisjoint(vector<int>& nums) {

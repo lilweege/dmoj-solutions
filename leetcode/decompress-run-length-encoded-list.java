@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/decompress-run-length-encoded-list
-
 class Solution {
     public int[] decompressRLElist(int[] nums) {
         int sum = 0;

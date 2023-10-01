@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/find-the-town-judge
-
 class Solution {
 public:
     int findJudge(int N, vector<vector<int>>& trusts) {

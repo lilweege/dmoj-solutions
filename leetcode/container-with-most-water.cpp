@@ -1,27 +1,17 @@
-// https://leetcode.com/problems/container-with-most-water
-
 class Solution {
 public:
     int maxArea(vector<int>& height) {
-        int n = size(height);
-        int l = 0, r = n-1;
+        int n = height.size();
+        int lo = 0, hi = n-1;
         int best = 0;
-        while (l < r) {
-            int idxDiff = r - l;
-            int maxHeight = min(height[r], height[l]);
-            int area = idxDiff * maxHeight;
-            best = max(area, best);
-            
-            // trick
-            if (height[r] > height[l])
-                ++l;
-            else
-                --r;
+        while (lo < hi) {
+            int w = hi - lo;
+            int h = min(height[lo], height[hi]);
+            best = max(best, w*h);
+            if (height[lo] < height[hi])
+                ++lo;
+            else --hi;
         }
-        // for (int i = 0; i < n; ++i)
-        //     for (int j = i+1; j < n; ++j)
-        //         best = max(best, min(height[i], height[j]) * (j-i));
         return best;
-        
     }
 };

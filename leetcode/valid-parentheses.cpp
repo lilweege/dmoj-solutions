@@ -1,25 +1,18 @@
-// https://leetcode.com/problems/valid-parentheses
-
 class Solution {
 public:
     bool isValid(string s) {
-        
-        stack<char> stack;
-        for (char c : s) {
-            if (c == '(' || c == '[' || c == '{') {
-                stack.push(c);
-            }
+        stack<char> st;
+        for (int i = 0; i < s.size(); ++i) {
+            char c = s[i];
+            if (c == '(' || c == '{' || c == '[')
+                st.push(c);
             else {
-                if (stack.empty())
-                    return false;
-                char open = stack.top();
-                stack.pop();
-                if (c == '}' && open != '{' ||
-                   c == ')' && open != '(' ||
-                   c == ']' && open != '[')
+                if (st.empty()) return false;
+                char d = st.top(); st.pop();
+                if (!(d == '(' && c == ')' || d == '{' && c == '}' || d == '[' && c == ']'))
                     return false;
             }
         }
-        return stack.empty();
+        return st.empty();
     }
 };

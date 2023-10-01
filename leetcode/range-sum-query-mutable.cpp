@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/range-sum-query-mutable
-
 class SegmentTree {
     int n;
     vector<int> tree;
